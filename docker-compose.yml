@@ -1,0 +1,23 @@
+services:
+  task-management:
+    image: auth-api:latest
+    ports:
+      - "8688:8688"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/auth
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker:29092
+      - SPRING_KAFKA_CONSUMER_GROUP=task-management-group
+    volumes:
+      - /Users/balajisivaprakasam/Desktop/SiBa/CODE_FILES/logs:/app/logs
+      - /Users/balajisivaprakasam/Desktop/SiBa/CODE_FILES/config/application.yml:/app/config/application.yml
+    networks:
+      - task-tracker-auth-network
+
+networks:
+  task-tracker-auth-network:
+    external: true
