@@ -12,5 +12,5 @@ public class AuthApiApplication {
 		SpringApplication.run(AuthApiApplication.class, args);
 		log.info("Auth API Application started successfully...");
 	}
-	
+
 }
