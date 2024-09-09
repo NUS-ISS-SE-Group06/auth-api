@@ -18,10 +18,10 @@ import java.util.UUID;
 @Component
 public class JWTUtil {
 
-    @Value("${task-tracker.jwt.secret:" + TaskTrackerConstant.JWT_MAGIC_WORD + "}")
+    @Value("${task-tracker.jwt.secret:" + AuthConstant.JWT_MAGIC_WORD + "}")
     private String secret;
 
-    @Value("${task-tracker.jwt.expirationTimeInMins:" + TaskTrackerConstant.JWT_EXPIRATION_MINUTES + "}")
+    @Value("${task-tracker.jwt.expirationTimeInMins:" + AuthConstant.JWT_EXPIRATION_MINUTES + "}")
     private int jwtTokenExpiryInMins;
 
     public void createJWT(UserDTO userDTO)  {
@@ -38,7 +38,7 @@ public class JWTUtil {
         log.info("hmacKey: {}",hmacKey);
 
         jwtToken = Jwts.builder()
-                    .issuer(TaskTrackerConstant.JWT_ISSUER)
+                    .issuer(AuthConstant.JWT_ISSUER)
                     .claims(claims)
                     .claim("auth", userDTO.getUserRole())
                     .id(UUID.randomUUID().toString())
