@@ -64,6 +64,9 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
                 // Set a value in the thread-local variable
                 userNameHolder.set(subjectRoleValues[0]);
                 userRoleHolder.set(subjectRoleValues[1]);
+
+                System.out.println("UserName: "+subjectRoleValues[0]);
+                System.out.println("UserRole: "+subjectRoleValues[1]);
             }
         }
         log.info("Token valid: {}",isTokenValid);

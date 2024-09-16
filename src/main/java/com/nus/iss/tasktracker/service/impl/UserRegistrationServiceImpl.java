@@ -89,6 +89,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         String loggedInUserName = TaskTrackerInterceptor.getLoggedInUserName();
         log.info("loggedInUserName: {}",loggedInUserName);
+        System.out.println("loggedInUserName: "+loggedInUserName);
 
         if(!StringUtils.hasText(requestDTO.getName())){
             throw new RuntimeException(String.format(AuthConstant.SIGNUP_INVALID_INPUT, "Name"));

@@ -67,6 +67,7 @@ public class TaskTrackerFilter  implements Filter {
                 }
             }
             log.info("TaskTrackerFilter Token valid: {}",isTokenValid);
+            System.out.println("TaskTrackerFilter Token valid: {}: " + isTokenValid);
             System.out.println("TaskTrackerFilter valid: {}: " + token);
 
             if(!isTokenValid){
