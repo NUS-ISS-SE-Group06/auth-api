@@ -27,3 +27,5 @@ INSERT INTO group_info(group_id,group_name,group_description,created_by, created
 SELECT 2,'Development Team','Group focused on software development projects.','admin','2024-08-31 00:00:00',NULL,NULL, NULL
 FROM DUAL
 WHERE NOT EXISTS(SELECT 1 FROM group_info WHERE group_id=2);
+
+COMMIT;
