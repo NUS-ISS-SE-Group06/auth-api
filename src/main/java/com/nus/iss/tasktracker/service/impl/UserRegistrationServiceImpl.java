@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+ import java.math.BigDecimal;
  import java.sql.Timestamp;
  import java.util.ArrayList;
  import java.util.List;
@@ -166,9 +167,9 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
             List<Object[]> queryResponseObject = userInfoRepository.findGroupMembersListByGroupId(groupDTOResponse.getGroupId());
             for (Object[] record : queryResponseObject) {
                 // column index : 0 ROLE_ADMIN, 1 ROLE_USER, 2 TOTAL_USERS
-                adminsInGroup = ((Integer) record[0]);
-                nonAdminsInGroup = ((Integer) record[1]);
-                totalUsersInGroup = ((Integer) record[2]);
+                adminsInGroup = ((BigDecimal) record[0]).intValue();
+                nonAdminsInGroup = ((BigDecimal) record[1]).intValue();
+                totalUsersInGroup = ((Long) record[2]).intValue();
             }
 
             log.info("In Group {}, we have {} non-admins, {} admins and in total {} users.", groupDTOResponse.getGroupId(), nonAdminsInGroup, adminsInGroup, totalUsersInGroup);
