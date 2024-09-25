@@ -28,4 +28,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/login"); // Exclude specific URL pattern
     }
 
+
 }
