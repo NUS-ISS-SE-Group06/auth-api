@@ -1,14 +1,14 @@
 services:
   mysql:
-    container_name: mysql
+    container_name: mysql-db
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: auth
     ports:
-      - "3306:3306"
+      - "3307:3307"
     volumes:
-      - /Users/balajisivaprakasam/Desktop/SiBa/CODE_FILES/mysql:/var/lib/mysql
+      -  /Users/brittaalex/Documents/workstation/mtech-worskpace/nus/db/auth/mysql:/var/lib/mysql
     networks:
       - task-tracker-auth-network
 
