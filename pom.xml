@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.3</version>
+		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nus.iss</groupId>
@@ -23,7 +23,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<maven.compiler.release>21</maven.compiler.release>
-		<springboot.starter.version>3.3.3</springboot.starter.version>
+		<springboot.starter.version>3.3.4</springboot.starter.version>
 		<spring.version>6.2.1</spring.version>
 		<mysql.version>8.3.0</mysql.version>
 		<hibernate.community.dialects.version>6.6.0.Final</hibernate.community.dialects.version>
