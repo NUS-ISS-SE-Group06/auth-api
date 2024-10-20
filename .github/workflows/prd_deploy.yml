@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  create_uat_package:
+  create_prd_package:
     runs-on: ubuntu-latest
     env:
       STAGING_DIR: prd_staging
@@ -43,7 +43,7 @@ jobs:
       - name: Upload Staging Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: uat_package
+          name: prd_package
           path: ${{ env.STAGING_DIR }}
           overwrite: true
           if-no-files-found: error
@@ -92,57 +92,22 @@ jobs:
           # Build and push the Docker image for multiple platforms (e.g., amd64 and arm64)
           docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USERNAME/auth-prd:latest --push .
 
-#  deploy_to_digitalocean:
-#    needs: build-and-push
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Deploy to DigitalOcean
-#        env:
-#          DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
-#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#          CONTAINER_NAME: "task-tracker-api"
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-#          chmod 600 ~/.ssh/id_rsa
-#          ssh-keyscan -t rsa 139.59.232.88 >> ~/.ssh/known_hosts
-#
-#          # Stop the container if it is running
-#          ssh -o StrictHostKeyChecking=no root@139.59.232.88 "docker stop $CONTAINER_NAME || true"
-#
-#          # Remove the container if it exists
-#          ssh -o StrictHostKeyChecking=no root@139.59.232.88 "docker rm -f $CONTAINER_NAME || true"
-#
-#          # Remove the image
-#          ssh -o StrictHostKeyChecking=no root@139.59.232.88 "docker rmi -f $DOCKER_USERNAME/nus-iss-task-tracker:latest"
-#
-#          docker pull $DOCKER_USERNAME/nus-iss-task-tracker:latest
-#          ssh -o StrictHostKeyChecking=no root@139.59.232.88 "docker run -d --name $CONTAINER_NAME -p 8688:8688 $DOCKER_USERNAME/nus-iss-task-tracker:latest"
+  deploy_to_digitalocean_kubernetes:
+    needs: build-and-push
+    runs-on: ubuntu-latest
 
-#  deploy_to_digitalocean_dr:
-#    needs: build-and-push
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Deploy to DigitalOcean
-#        env:
-#          DIGITALOCEAN_SSH_PRIVATE_KEY: ${{ secrets.DIGITALOCEAN_SSH_PRIVATE_KEY }}
-#          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-#          CONTAINER_NAME: "task-tracker-api"
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "$DIGITALOCEAN_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-#          chmod 600 ~/.ssh/id_rsa
-#          ssh-keyscan -t rsa 128.199.134.155 >> ~/.ssh/known_hosts
-#
-#          # Stop the container if it is running
-#          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker stop $CONTAINER_NAME || true"
-#
-#          # Remove the container if it exists
-#          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker rm -f $CONTAINER_NAME || true"
-#
-#          # Remove the image
-#          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker rmi -f $DOCKER_USERNAME/nus-iss-task-tracker:latest"
-#
-#          docker pull $DOCKER_USERNAME/nus-iss-task-tracker:latest
-#          ssh -o StrictHostKeyChecking=no root@128.199.134.155 "docker run -d --name $CONTAINER_NAME -p 8688:8688 $DOCKER_USERNAME/nus-iss-task-tracker:latest"
-#
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/prd/auth_namespace.yml
+          kubectl apply -f k8s/prd/auth_secrets.yml
+          kubectl apply -f k8s/prd/auth_configmaps.yml
+          kubectl apply -f k8s/prd/auth_deployment.yml
