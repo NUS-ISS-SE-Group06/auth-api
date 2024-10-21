@@ -34,4 +34,8 @@ task-tracker:
 logging:
   config: classpath:log4j2-dev.xml
 
+server:
+  port: 8688
+  servlet:
+    contextPath: /api
 
