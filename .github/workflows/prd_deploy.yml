@@ -120,3 +120,4 @@ jobs:
           kubectl apply -f k8s/prd/auth_secrets.yml
           kubectl apply -f k8s/prd/auth_configmaps.yml
           kubectl apply -f k8s/prd/auth_deployment.yml
+          kubectl apply -f k8s/prd/auth_deployment_hpa.yaml
