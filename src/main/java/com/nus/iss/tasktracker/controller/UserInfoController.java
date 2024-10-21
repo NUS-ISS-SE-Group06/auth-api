@@ -38,11 +38,13 @@ public class UserInfoController {
         if (userDTO !=  null){
             responseBody = userDTO;
             successOrFailMessage = "Logon successfully.";
+            log.info("successOrFailMessage : {}", successOrFailMessage);
             //TO CREATE NEW AUTH TOKEN AND SEND IT AS PART OF LOGIN RESPONSE
             jwtUtil.createJWT(userDTO);
             return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
         } else {
             successOrFailMessage ="Invalid Credential.";
+            log.info("successOrFailMessage : {}", successOrFailMessage);
             return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
         }
     }
