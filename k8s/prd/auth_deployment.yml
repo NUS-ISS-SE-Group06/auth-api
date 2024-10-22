@@ -17,11 +17,14 @@ spec:
     spec:
       containers:
         - name: auth-prd
-          image: nusissgroup6/auth-prd:latest
+          image: nusissgroup6/auth-prd:c91ee09ec136abdfac032546efd69f0d722d6efa
           imagePullPolicy: Always
           ports:
             - containerPort: 8688
           env:
+            - name: SERVER_PORT
+              value: "8688"
+
             - name: SPRING_PROFILES_ACTIVE
               valueFrom:
                 configMapKeyRef:
