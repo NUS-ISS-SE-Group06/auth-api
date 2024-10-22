@@ -49,6 +49,7 @@ jobs:
           if-no-files-found: error
 
   build-and-push:
+    needs: create_prd_package
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -79,7 +80,7 @@ jobs:
         uses: docker/setup-qemu-action@v1
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Build and push Docker image
         env:
@@ -90,7 +91,7 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           
           # Build and push the Docker image for multiple platforms (e.g., amd64 and arm64)
-          docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USERNAME/auth-prd:latest --push .
+          docker buildx build --platform linux/amd64,linux/arm64 -t $DOCKER_USERNAME/auth-prd:${{ github.sha }} --push .
 
   deploy_to_digitalocean_kubernetes:
     needs: build-and-push
@@ -119,5 +120,6 @@ jobs:
           kubectl apply -f k8s/prd/auth_namespace.yml
           kubectl apply -f k8s/prd/auth_secrets.yml
           kubectl apply -f k8s/prd/auth_configmaps.yml
+          sed -i "s|image: $DOCKER_USERNAME/auth-prd:.*|image: $DOCKER_USERNAME/auth-prd:${{ github.sha }}|" k8s/deployment.yml
           kubectl apply -f k8s/prd/auth_deployment.yml
           kubectl apply -f k8s/prd/auth_deployment_hpa.yaml
