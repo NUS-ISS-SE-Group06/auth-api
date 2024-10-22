@@ -120,6 +120,6 @@ jobs:
           kubectl apply -f k8s/prd/auth_namespace.yml
           kubectl apply -f k8s/prd/auth_secrets.yml
           kubectl apply -f k8s/prd/auth_configmaps.yml
-          sed -i "s|image: $DOCKER_USERNAME/auth-prd:.*|image: $DOCKER_USERNAME/auth-prd:${{ github.sha }}|" k8s/deployment.yml
+          sed -i "s|image: $DOCKER_USERNAME/auth-prd:.*|image: $DOCKER_USERNAME/auth-prd:${{ github.sha }}|" k8s/prd/auth_deployment.yml
           kubectl apply -f k8s/prd/auth_deployment.yml
           kubectl apply -f k8s/prd/auth_deployment_hpa.yaml
