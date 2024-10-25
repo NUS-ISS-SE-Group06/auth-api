@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: auth-prd
-          image: nusissgroup6/auth-prd:946593c749ec5834745845b3d4710daa946cf9d9
+          image: nusissgroup6/auth-prd:a161d1a99e357343bded528ff2e355ff5504d448
           imagePullPolicy: Always
           ports:
             - containerPort: 8688
