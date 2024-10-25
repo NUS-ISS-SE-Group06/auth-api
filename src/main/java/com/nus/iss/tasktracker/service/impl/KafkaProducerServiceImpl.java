@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KafkaProducerServiceImpl implements KafkaProducerService {
 
-    @Value("${task-tracker.kafka.enabled:false}")
+    @Value("${task-tracker.kafka.enabled: false}")
     private boolean kafkaEnabled;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
@@ -24,6 +24,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Override
     public void sendMessage(String topic, String message) {
         try {
+            log.info("kafkaEnabled - {}", kafkaEnabled);
             if(kafkaEnabled){
                 kafkaTemplate.send(topic,message);
                 log.info("Message sent successfully to topic - {} ", topic);
