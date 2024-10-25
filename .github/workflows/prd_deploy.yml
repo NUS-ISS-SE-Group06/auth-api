@@ -115,11 +115,15 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
           doctl kubernetes cluster kubeconfig save 77c86425-2a82-4012-beda-18a1a12979ae
 
+      - name: Update Image Tag in Deployment YAML
+        run: |
+          sed -i.bak "s|image: nusissgroup6/auth-prd:.*|image: nusissgroup6/auth-prd:${{ github.sha }}|" k8s/prd/auth_deployment.yml
+          cat k8s/prd/auth_deployment.yml | grep "image:"
+
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/prd/auth_namespace.yml
           kubectl apply -f k8s/prd/auth_secrets.yml
           kubectl apply -f k8s/prd/auth_configmaps.yml
-          sed -i "s|image: $DOCKER_USERNAME/auth-prd:.*|image: $DOCKER_USERNAME/auth-prd:${{ github.sha }}|" k8s/prd/auth_deployment.yml
           kubectl apply -f k8s/prd/auth_deployment.yml
           kubectl apply -f k8s/prd/auth_deployment_hpa.yaml
